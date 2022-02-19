@@ -68,7 +68,7 @@ sudo 7za x -o/app-server server-assets.zip
 cd app-server
 sudo python setup.py
 
-copyTo local-manipulator/local-manipulator.service /usr/lib/systemd/system
+cp local-manipulator/local-manipulator.service /usr/lib/systemd/system
 
 sudo systemctl enable local-manipulator.service
 
