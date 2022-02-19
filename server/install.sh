@@ -59,6 +59,9 @@ sudo yum-config-manager \
 	
 sudo yum install docker-ce docker-ce-cli containerd.io -y
 sudo yum install git -y
+sudo yum install python36 -y
+sudo yum install epel-release -y
+sudo yum install p7zip p7zip-plugins -y
 
 sudo curl https://report-ms.github.io/LocalManipulator-linux.zip --output LocalManipulator.zip
 sudo 7za x -o/LocalManipulator LocalManipulator.zip
