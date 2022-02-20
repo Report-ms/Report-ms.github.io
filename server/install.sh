@@ -68,7 +68,7 @@ sudo yum install p7zip p7zip-plugins -y
 sudo mkdir app-server
 cd app-server
 sudo curl https://report-ms.github.io/server/assets.zip --output server-assets.zip
-7za x server-assets.zip
+sudo 7za x server-assets.zip
 sudo pip3 install pathlib
 sudo pip3 install requests
 sudo python3 setup.py
