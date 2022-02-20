@@ -88,5 +88,5 @@ sudo systemctl start local-manipulator.service
 
 cd app
 sudo docker build ./
-docker pull postgres
+sudo docker pull postgres
 docker-compose up
