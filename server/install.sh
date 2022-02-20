@@ -69,6 +69,9 @@ sudo mkdir app-server
 cd app-server
 sudo curl https://report-ms.github.io/server/assets.zip --output server-assets.zip
 sudo 7za x server-assets.zip
+cd ..
+sudo chmod -R 777 app-server
+cd app-server
 sudo pip3 install pathlib
 sudo pip3 install requests
 sudo python3 setup.py
