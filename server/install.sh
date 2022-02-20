@@ -58,17 +58,24 @@ sudo yum-config-manager \
     https://download.docker.com/linux/centos/docker-ce.repo
 	
 sudo yum install docker-ce docker-ce-cli containerd.io -y
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 sudo yum install git -y
 sudo yum install python36 -y
 sudo yum install epel-release -y
 sudo yum install p7zip p7zip-plugins -y
 
-sudo curl https://report-ms.github.io/server/assets.zip --output server-assets.zip
-sudo 7za x -o/app-server server-assets.zip
+sudo mkdir app-server
 cd app-server
-sudo python setup.py
+sudo curl https://report-ms.github.io/server/assets.zip --output server-assets.zip
+7za x server-assets.zip
+sudo pip3 install pathlib
+sudo pip3 install requests
+sudo python3 setup.py
 
-cp local-manipulator/local-manipulator.service /usr/lib/systemd/system/local-manipulator.service
+sudo cp local-manipulator/local-manipulator.service /usr/lib/systemd/system/local-manipulator.service
+
+sudo chmod +x local-manipulator/LocalManipulator
 
 sudo systemctl enable local-manipulator.service
 
@@ -77,4 +84,6 @@ sudo systemctl start docker
 sudo systemctl start local-manipulator.service
 
 cd app
-docker compose up
+sudo docker build ./
+docker pull postgres
+docker-compose up
