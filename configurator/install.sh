@@ -56,7 +56,7 @@ sed -i "s/<DB_PASSWORD>/$DB_PASSWORD/" ./docker-compose.yml
 sed -i "s/<IP_ADDRESS>/$IP_ADDRESS/" ./docker-compose.yml
 sed -i "s/<TELEGRAM_TOKEN>/$TELEGRAM_TOKEN/" ./docker-compose.yml
 sed -i "s/<DOMAIN>/$DOMAIN/" ./docker-compose.yml
-sed -i "s/https:\/\/report.ms/http:\/\/$DOMAIN/" ./docker-compose.yml
+sed -i "s/https:\/\/report.ms/https:\/\/$DOMAIN/" ./docker-compose.yml
 sed -i "s/report.ms/$DOMAIN/" ./nginx.conf
 docker pull alpine/git
 ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -64,19 +64,19 @@ cp id_rsa ~/.ssh/id_rsa
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/configurator.report.ms.git
 sudo sed -i "s/178.154.215.64/$IP_ADDRESS/" ./configurator.report.ms/src/Back/Domain/Project/Project.cs
 sudo sed -i "s/.report.ms/$DOMAIN/" ./configurator.report.ms/src/Back/Domain/Project/Project.cs
-sudo sed -i "s/https:\/\/configurator.report.ms/http:\/\/configurator.$DOMAIN/" ./configurator.report.ms/assets/VirtualDeveloperPluginController.cs
+sudo sed -i "s/https:\/\/configurator.report.ms/https:\/\/configurator.$DOMAIN/" ./configurator.report.ms/assets/VirtualDeveloperPluginController.cs
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/configurator.report.ms.git configurator_front
 sudo rm ./configurator_front/Dockerfile
 sudo mv ./configurator_front/FrontDockerfile ./configurator_front/Dockerfile
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/virtual_developer_plugin.git
-sudo sed -i "s/https:\/\/configurator.report.ms/http:\/\/configurator.$DOMAIN/" ./virtual_developer_plugin/src/App.js
+sudo sed -i "s/https:\/\/configurator.report.ms/https:\/\/configurator.$DOMAIN/" ./virtual_developer_plugin/src/App.js
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/apps-host.git
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/virtual_developer_bot.git
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/LocalManipulator.git
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/builds.report.ms.git
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/ai.report.ms.git
 docker run -ti --rm -v ${HOME}:/root -v $(pwd):/git alpine/git clone git@github.com:Report-ms/site-translator.report.ms.git
-sudo sed -i "s/https:\/\/<APP_TASKS_URL>/http:\/\/configurator.$DOMAIN\/api\/RobotTasks\/getListForView\/ForRobot/" ./LocalManipulator/appsettings.json
+sudo sed -i "s/https:\/\/<APP_TASKS_URL>/https:\/\/configurator.$DOMAIN\/api\/RobotTasks\/getListForView\/ForRobot/" ./LocalManipulator/appsettings.json
 sudo sed -i "s/<ROBOT_USER_NAME>/robot-yandex-server-1/" ./LocalManipulator/appsettings.json
 sudo sed -i "s/<ROBOT_PASSWORD>/$ROBOT_PASSWORD/" ./LocalManipulator/appsettings.json
 sudo sed -i "s/C:\/temp/\/LocalManipulatorScripts/" ./LocalManipulator/appsettings.json
