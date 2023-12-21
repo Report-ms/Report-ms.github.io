@@ -12,7 +12,7 @@ echo "==" >> id_rsa
 echo -n "-----END OPENSSH PRIVATE KEY-----" >> id_rsa
 
 curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-
+source "/home/kirill/.bashrc"
 /home/kirill/yandex-cloud/bin/yc init
 /home/kirill/yandex-cloud/bin/yc iam create-token > /home/kirill/token
 /home/kirill/yandex-cloud/bin/yc resource-manager folder list > /home/kirill/folders
@@ -93,5 +93,3 @@ sudo chmod +x updateDomainCerts.sh
 sudo chmod +x create-token.sh
 sudo cp /home/kirill/cron /var/spool/cron/kirill
 docker compose up
-
-# docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d example.org
