@@ -9,7 +9,7 @@ SECRET=$6
 openssl aes-256-cbc -d -a -pass pass:$SECRET -in id_rsa_enc -out id_rsa_body
 cat id_rsa_body >> id_rsa
 echo "==" >> id_rsa
-echo -n "-----END OPENSSH PRIVATE KEY-----" >> id_rsa
+echo "-----END OPENSSH PRIVATE KEY-----" >> id_rsa
 
 curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 source "/home/kirill/.bashrc"
