@@ -1,0 +1,78 @@
+<div id="rec847796917" class="r t-rec t-rec_pt_135 t-rec_pt-res-480_90 t-rec_pb_135 t-rec_pb-res-480_90" style="padding-top:135px;padding-bottom:135px;background-color:#fff; " data-record-type="486" data-bg-color="#fff">
+    <!-- T486 -->
+    <div class="t486">
+        <div class="t-container">
+            <div class="t486__top t-col t-col_6 ">
+                <div class="t486__textwrapper t-align_left">
+                    <div class="t486__content t-valign_middle">
+                        <div class="t486__box">
+                            <div class="t486__title t-title t-title_xs " field="title">{{.Заголовок}}</div>
+                            <div class="t486__descr t-descr t-descr_md " field="descr">{{.Описание}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="t-col t-col_5 ">
+                <div class="t486__imgcontainer">
+                    <div class="t486__row">
+                        <div class="t486__imgwrapper" itemscope itemtype="http://schema.org/ImageObject">
+                            <meta itemprop="image" content="{{.Изображение}}">
+                            <div class="t486__blockimg t-bgimg" data-original="{{.Изображение}}" bgimgfield="img" style="background-image:url('{{.Изображение}}');"></div>
+                            <div class="t486__separator"></div>
+                        </div>
+                        <div class="t486__imgwrapper" itemscope itemtype="http://schema.org/ImageObject">
+                            <meta itemprop="image" content="{{.Изображение2}}">
+                            <div class="t486__blockimg t-bgimg" data-original="{{.Изображение2}}" bgimgfield="img2" style="background-image:url('{{.Изображение2}}');"></div>
+                            <div class="t486__separator"></div>
+                        </div>
+                    </div>
+                    <div class="t486__row t486__row_last">
+                        <div class="t486__imgwrapper" itemscope itemtype="http://schema.org/ImageObject">
+                            <meta itemprop="image" content="{{.Изображение3}}">
+                            <div class="t486__blockimg t-bgimg" data-original="{{.Изображение3}}" bgimgfield="img3" style="background-image:url('{{.Изображение3}}');"></div>
+                            <div class="t486__separator"></div>
+                        </div>
+                        <div class="t486__imgwrapper" itemscope itemtype="http://schema.org/ImageObject">
+                            <meta itemprop="image" content="{{.Изображение4}}">
+                            <div class="t486__blockimg t-bgimg" data-original="{{.Изображение4}}" bgimgfield="img4" style="background-image:url('{{.Изображение4}}');"></div>
+                            <div class="t486__separator"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        t_onReady(function() {
+            t_onFuncLoad('t486_setHeight', function() {
+                window.addEventListener('resize', t_throttle(function() {
+                    t486_setHeight('847796917');
+                }));
+                t486_setHeight('847796917');
+                var rec = document.querySelector('#rec847796917');
+                if (rec) {
+                    var wrapper = rec.querySelector('.t486');
+                    if (wrapper) {
+                        wrapper.addEventListener('displayChanged', function() {
+                            t486_setHeight('847796917');
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+    <style>
+        #rec847796917 .t486__title {
+            color: #000000;
+        }
+
+        #rec847796917 .t486__descr {
+            color: #000000;
+        }
+    </style>
+    <style>
+        #rec847796917 .t486__blockimg {
+            border-radius: 15px;
+        }
+    </style>
+</div>

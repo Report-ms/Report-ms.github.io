@@ -1,0 +1,549 @@
+<header id="t-header" class="t-records" data-hook="blocks-collection-content-node" data-tilda-project-id="11751477" data-tilda-page-id="60966217" data-tilda-formskey="f0ace74c5a07bc70a3f5712e11751477" data-tilda-cookie="no" data-tilda-lazy="yes" data-tilda-root-zone="com">
+    <div id="rec847925833" class="r t-rec" style="background-color:#ffffff; " data-animationappear="off" data-record-type="454" data-bg-color="#ffffff">
+        <!-- T454 -->
+        <div id="nav847925833marker"></div>
+        <div class="tmenu-mobile">
+            <div class="tmenu-mobile__container">
+                <div class="tmenu-mobile__burgerlogo">
+                    <img src="{{.Логотип}}" class="tmenu-mobile__imglogo" imgfield="img" style="max-width: 220px; width: 220px;" alt="Древо">
+                </div>
+                <button type="button" class="t-menuburger t-menuburger_first " aria-label="Навигационное меню" aria-expanded="false">
+                    <span style="background-color:#000000;"></span>
+                    <span style="background-color:#000000;"></span>
+                    <span style="background-color:#000000;"></span>
+                    <span style="background-color:#000000;"></span>
+                </button>
+                <script>
+                    function t_menuburger_init(recid) {
+                        var rec = document.querySelector('#rec' + recid);
+                        if (!rec)
+                            return;
+                        var burger = rec.querySelector('.t-menuburger');
+                        if (!burger)
+                            return;
+                        var isSecondStyle = burger.classList.contains('t-menuburger_second');
+                        if (isSecondStyle && !window.isMobile && !('ontouchend'in document)) {
+                            burger.addEventListener('mouseenter', function() {
+                                if (burger.classList.contains('t-menuburger-opened'))
+                                    return;
+                                burger.classList.remove('t-menuburger-unhovered');
+                                burger.classList.add('t-menuburger-hovered');
+                            });
+                            burger.addEventListener('mouseleave', function() {
+                                if (burger.classList.contains('t-menuburger-opened'))
+                                    return;
+                                burger.classList.remove('t-menuburger-hovered');
+                                burger.classList.add('t-menuburger-unhovered');
+                                setTimeout(function() {
+                                    burger.classList.remove('t-menuburger-unhovered');
+                                }, 300);
+                            });
+                        }
+                        burger.addEventListener('click', function() {
+                            if (!burger.closest('.tmenu-mobile') && !burger.closest('.t450__burger_container') && !burger.closest('.t466__container') && !burger.closest('.t204__burger') && !burger.closest('.t199__js__menu-toggler')) {
+                                burger.classList.toggle('t-menuburger-opened');
+                                burger.classList.remove('t-menuburger-unhovered');
+                            }
+                        });
+                        var menu = rec.querySelector('[data-menu="yes"]');
+                        if (!menu)
+                            return;
+                        var menuLinks = menu.querySelectorAll('.t-menu__link-item');
+                        var submenuClassList = ['t978__menu-link_hook', 't978__tm-link', 't966__tm-link', 't794__tm-link', 't-menusub__target-link'];
+                        Array.prototype.forEach.call(menuLinks, function(link) {
+                            link.addEventListener('click', function() {
+                                var isSubmenuHook = submenuClassList.some(function(submenuClass) {
+                                    return link.classList.contains(submenuClass);
+                                });
+                                if (isSubmenuHook)
+                                    return;
+                                burger.classList.remove('t-menuburger-opened');
+                            });
+                        });
+                        menu.addEventListener('clickedAnchorInTooltipMenu', function() {
+                            burger.classList.remove('t-menuburger-opened');
+                        });
+                    }
+                    t_onReady(function() {
+                        t_onFuncLoad('t_menuburger_init', function() {
+                            t_menuburger_init('847925833');
+                        });
+                    });
+                </script>
+                <style>
+                    .t-menuburger {
+                        position: relative;
+                        flex-shrink: 0;
+                        width: 28px;
+                        height: 20px;
+                        padding: 0;
+                        border: none;
+                        background-color: transparent;
+                        outline: none;
+                        -webkit-transform: rotate(0deg);
+                        transform: rotate(0deg);
+                        transition: transform .5s ease-in-out;
+                        cursor: pointer;
+                        z-index: 999;
+                    }
+
+                    .t-menuburger span {
+                        display: block;
+                        position: absolute;
+                        width: 100%;
+                        opacity: 1;
+                        left: 0;
+                        -webkit-transform: rotate(0deg);
+                        transform: rotate(0deg);
+                        transition: .25s ease-in-out;
+                        height: 3px;
+                        background-color: #000;
+                    }
+
+                    .t-menuburger span:nth-child(1) {
+                        top: 0px;
+                    }
+
+                    .t-menuburger span:nth-child(2),.t-menuburger span:nth-child(3) {
+                        top: 8px;
+                    }
+
+                    .t-menuburger span:nth-child(4) {
+                        top: 16px;
+                    }
+
+                    .t-menuburger__big {
+                        width: 42px;
+                        height: 32px;
+                    }
+
+                    .t-menuburger__big span {
+                        height: 5px;
+                    }
+
+                    .t-menuburger__big span:nth-child(2),.t-menuburger__big span:nth-child(3) {
+                        top: 13px;
+                    }
+
+                    .t-menuburger__big span:nth-child(4) {
+                        top: 26px;
+                    }
+
+                    .t-menuburger__small {
+                        width: 22px;
+                        height: 14px;
+                    }
+
+                    .t-menuburger__small span {
+                        height: 2px;
+                    }
+
+                    .t-menuburger__small span:nth-child(2),.t-menuburger__small span:nth-child(3) {
+                        top: 6px;
+                    }
+
+                    .t-menuburger__small span:nth-child(4) {
+                        top: 12px;
+                    }
+
+                    .t-menuburger-opened span:nth-child(1) {
+                        top: 8px;
+                        width: 0%;
+                        left: 50%;
+                    }
+
+                    .t-menuburger-opened span:nth-child(2) {
+                        -webkit-transform: rotate(45deg);
+                        transform: rotate(45deg);
+                    }
+
+                    .t-menuburger-opened span:nth-child(3) {
+                        -webkit-transform: rotate(-45deg);
+                        transform: rotate(-45deg);
+                    }
+
+                    .t-menuburger-opened span:nth-child(4) {
+                        top: 8px;
+                        width: 0%;
+                        left: 50%;
+                    }
+
+                    .t-menuburger-opened.t-menuburger__big span:nth-child(1) {
+                        top: 6px;
+                    }
+
+                    .t-menuburger-opened.t-menuburger__big span:nth-child(4) {
+                        top: 18px;
+                    }
+
+                    .t-menuburger-opened.t-menuburger__small span:nth-child(1),.t-menuburger-opened.t-menuburger__small span:nth-child(4) {
+                        top: 6px;
+                    }
+
+                    @media (hover),(min-width: 0\0) {
+                        .t-menuburger_first:hover span:nth-child(1) {
+                            transform:translateY(1px);
+                        }
+
+                        .t-menuburger_first:hover span:nth-child(4) {
+                            transform: translateY(-1px);
+                        }
+
+                        .t-menuburger_first.t-menuburger__big:hover span:nth-child(1) {
+                            transform: translateY(3px);
+                        }
+
+                        .t-menuburger_first.t-menuburger__big:hover span:nth-child(4) {
+                            transform: translateY(-3px);
+                        }
+                    }
+
+                    .t-menuburger_second span:nth-child(2),.t-menuburger_second span:nth-child(3) {
+                        width: 80%;
+                        left: 20%;
+                        right: 0;
+                    }
+
+                    @media (hover),(min-width: 0\0) {
+                        .t-menuburger_second.t-menuburger-hovered span:nth-child(2),.t-menuburger_second.t-menuburger-hovered span:nth-child(3) {
+                            animation:t-menuburger-anim 0.3s ease-out normal forwards;
+                        }
+
+                        .t-menuburger_second.t-menuburger-unhovered span:nth-child(2),.t-menuburger_second.t-menuburger-unhovered span:nth-child(3) {
+                            animation: t-menuburger-anim2 0.3s ease-out normal forwards;
+                        }
+                    }
+
+                    .t-menuburger_second.t-menuburger-opened span:nth-child(2),.t-menuburger_second.t-menuburger-opened span:nth-child(3) {
+                        left: 0;
+                        right: 0;
+                        width: 100%!important;
+                    }
+
+                    .t-menuburger_third span:nth-child(4) {
+                        width: 70%;
+                        left: unset;
+                        right: 0;
+                    }
+
+                    @media (hover),(min-width: 0\0) {
+                        .t-menuburger_third:not(.t-menuburger-opened):hover span:nth-child(4) {
+                            width:100%;
+                        }
+                    }
+
+                    .t-menuburger_third.t-menuburger-opened span:nth-child(4) {
+                        width: 0!important;
+                        right: 50%;
+                    }
+
+                    .t-menuburger_fourth {
+                        height: 12px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__small {
+                        height: 8px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__big {
+                        height: 18px;
+                    }
+
+                    .t-menuburger_fourth span:nth-child(2),.t-menuburger_fourth span:nth-child(3) {
+                        top: 4px;
+                        opacity: 0;
+                    }
+
+                    .t-menuburger_fourth span:nth-child(4) {
+                        top: 8px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__small span:nth-child(2),.t-menuburger_fourth.t-menuburger__small span:nth-child(3) {
+                        top: 3px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__small span:nth-child(4) {
+                        top: 6px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__small span:nth-child(2),.t-menuburger_fourth.t-menuburger__small span:nth-child(3) {
+                        top: 3px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__small span:nth-child(4) {
+                        top: 6px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__big span:nth-child(2),.t-menuburger_fourth.t-menuburger__big span:nth-child(3) {
+                        top: 6px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger__big span:nth-child(4) {
+                        top: 12px;
+                    }
+
+                    @media (hover),(min-width: 0\0) {
+                        .t-menuburger_fourth:not(.t-menuburger-opened):hover span:nth-child(1) {
+                            transform:translateY(1px);
+                        }
+
+                        .t-menuburger_fourth:not(.t-menuburger-opened):hover span:nth-child(4) {
+                            transform: translateY(-1px);
+                        }
+
+                        .t-menuburger_fourth.t-menuburger__big:not(.t-menuburger-opened):hover span:nth-child(1) {
+                            transform: translateY(3px);
+                        }
+
+                        .t-menuburger_fourth.t-menuburger__big:not(.t-menuburger-opened):hover span:nth-child(4) {
+                            transform: translateY(-3px);
+                        }
+                    }
+
+                    .t-menuburger_fourth.t-menuburger-opened span:nth-child(1),.t-menuburger_fourth.t-menuburger-opened span:nth-child(4) {
+                        top: 4px;
+                    }
+
+                    .t-menuburger_fourth.t-menuburger-opened span:nth-child(2),.t-menuburger_fourth.t-menuburger-opened span:nth-child(3) {
+                        opacity: 1;
+                    }
+
+                    @keyframes t-menuburger-anim {
+                        0% {
+                            width: 80%;
+                            left: 20%;
+                            right: 0;
+                        }
+
+                        50% {
+                            width: 100%;
+                            left: 0;
+                            right: 0;
+                        }
+
+                        100% {
+                            width: 80%;
+                            left: 0;
+                            right: 20%;
+                        }
+                    }
+
+                    @keyframes t-menuburger-anim2 {
+                        0% {
+                            width: 80%;
+                            left: 0;
+                        }
+
+                        50% {
+                            width: 100%;
+                            right: 0;
+                            left: 0;
+                        }
+
+                        100% {
+                            width: 80%;
+                            left: 20%;
+                            right: 0;
+                        }
+                    }
+                </style>
+            </div>
+        </div>
+        <style>
+            .tmenu-mobile {
+                background-color: #111;
+                display: none;
+                width: 100%;
+                top: 0;
+                z-index: 990;
+            }
+
+            .tmenu-mobile_positionfixed {
+                position: fixed;
+            }
+
+            .tmenu-mobile__text {
+                color: #fff;
+            }
+
+            .tmenu-mobile__container {
+                min-height: 64px;
+                padding: 20px;
+                position: relative;
+                box-sizing: border-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-justify-content: space-between;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+            }
+
+            .tmenu-mobile__list {
+                display: block;
+            }
+
+            .tmenu-mobile__burgerlogo {
+                display: inline-block;
+                font-size: 24px;
+                font-weight: 400;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+
+            .tmenu-mobile__imglogo {
+                height: auto;
+                display: block;
+                max-width: 300px!important;
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0 auto;
+            }
+
+            @media screen and (max-width: 980px) {
+                .tmenu-mobile__menucontent_hidden {
+                    display:none;
+                    height: 100%;
+                }
+
+                .tmenu-mobile {
+                    display: block;
+                }
+            }
+
+            @media screen and (max-width: 980px) {
+                #rec847925833 .tmenu-mobile {
+                    background-color:#ffffff;
+                }
+
+                #rec847925833 .t-menuburger {
+                    -webkit-order: 1;
+                    -ms-flex-order: 1;
+                    order: 1;
+                }
+            }
+        </style>
+        <style>
+            #rec847925833 .tmenu-mobile__burgerlogo a {
+                color: #000000;
+            }
+        </style>
+        <style>
+            #rec847925833 .tmenu-mobile__burgerlogo__title {
+                color: #000000;
+            }
+        </style>
+        <div id="nav847925833" class="t454 t454__positionstatic tmenu-mobile__menucontent_hidden" style="background-color: rgba(255,255,255,1); height:100px; " data-bgcolor-hex="#fff" data-bgcolor-rgba="rgba(255,255,255,1)" data-navmarker="nav847925833marker" data-appearoffset="" data-bgopacity-two="" data-menushadow="" data-menushadow-css="" data-bgopacity="1" data-menu="yes">
+            <div class="t454__maincontainer " style="height:100px;">
+                <div class="t454__logowrapper">
+                    <div class="t454__logowrapper2">
+                        <div style="display: block;">
+                            <img class="t454__imglogo t454__imglogomobile" src="{{.Логотип}}" imgfield="img" style="max-width: 220px; width: 220px;" alt="Древо">
+                        </div>
+                    </div>
+                </div>
+                <div class="t454__leftwrapper" style=" padding-right:160px; text-align: left;">
+                    <nav class="t454__leftmenuwrapper">
+                        <ul role="list" class="t454__list t-menu__list">
+                            {{range $index, $element := getHalf .Пункты 0}}
+                                <li class="t454__list_item" style="padding:0 15px 0 0;">
+                                    <a class="t-menu__link-item" href="{{$element.Ссылка}}" data-menu-submenu-hook="" data-menu-item-number="{{$element.OrderNumber}}">{{$element.Название}}</a>
+                                </li>
+                            {{end}}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="t454__rightwrapper" style=" padding-left:160px; text-align: right;">
+                    <nav class="t454__rightmenuwrapper">
+                        <ul class="t454__list t-menu__list">
+                            {{range $index, $element := getHalf .Пункты 1}}
+                                <li class="t454__list_item" style="padding:0 15px 0 0;">
+                                    <a class="t-menu__link-item" href="{{$element.Ссылка}}" data-menu-submenu-hook="" data-menu-item-number="{{$element.OrderNumber}}">{{$element.Название}}</a>
+                                </li>
+                            {{end}}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="t454__linewrapper">
+                    <hr class="t454__horizontalline" style=" background-color:#000000; height:1px; opacity:0.2;">
+                </div>
+            </div>
+        </div>
+        <style>
+            @media screen and (max-width: 980px) {
+                #rec847925833 .t454__logowrapper {
+                    display:none;
+                }
+            }
+        </style>
+        <style>
+            @media screen and (max-width: 980px) {
+                #rec847925833 .t454__leftcontainer {
+                    padding:20px;
+                }
+            }
+
+            @media screen and (max-width: 980px) {
+                #rec847925833 .t454__imglogo {
+                    padding:20px 0;
+                }
+            }
+        </style>
+        <script>
+            t_onReady(function() {
+                t_onFuncLoad('t_menu__highlightActiveLinks', function() {
+                    t_menu__highlightActiveLinks('.t454__list_item a');
+                });
+            });
+            t_onFuncLoad('t_menu__setBGcolor', function() {
+                window.addEventListener('resize', t_throttle(function() {
+                    t_menu__setBGcolor('847925833', '.t454');
+                }));
+            });
+            t_onReady(function() {
+                t_onFuncLoad('t_menu__setBGcolor', function() {
+                    t_menu__setBGcolor('847925833', '.t454');
+                });
+                t_onFuncLoad('t_menu__interactFromKeyboard', function() {
+                    t_menu__interactFromKeyboard('847925833');
+                });
+            });
+        </script>
+        <script>
+            t_onReady(function() {
+                t_onFuncLoad('t_menu__createMobileMenu', function() {
+                    t_menu__createMobileMenu('847925833', '.t454');
+                });
+            });
+        </script>
+        <style>
+            #rec847925833 .t-menu__link-item {
+            }
+
+            @supports (overflow: -webkit-marquee) and (justify-content:inherit) {
+                #rec847925833 .t-menu__link-item,#rec847925833 .t-menu__link-item.t-active {
+                    opacity:1 !important;
+                }
+            }
+        </style>
+        <style>
+            #rec847925833 .t454__logowrapper2 a {
+                color: #000000;
+            }
+
+            #rec847925833 a.t-menu__link-item {
+                color: #000000;
+                font-weight: 600;
+            }
+        </style>
+        <style>
+            #rec847925833 .t454__logo {
+                color: #000000;
+            }
+        </style>
+        <!--[if IE 8]> <style>#rec847925833 .t454{filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#D9fff',endColorstr='#D9fff');}</style> <![endif]-->
+    </div>
+</header>

@@ -1,0 +1,70 @@
+<!-- <div class="oblozhka_s_izobrazheniem_vnizu">
+    <h1>{{.Заголовок}}</h1>
+    <p>{{.Описание}}</p>
+    {{if ne .Основная_кнопка nil}}
+        <a class="ui primary button" href="{{.Основная_кнопка.Url}}" {{if eq .Основная_кнопка.В_новом_окне "Да" }} target="_blank" {{end}}>{{.Основная_кнопка.Текст}}</a>
+    {{end}}
+    {{if ne .Дополнительная_кнопка nil}}
+        <a class="ui button" href="{{.Дополнительная_кнопка.Url}}" {{if eq .Дополнительная_кнопка.В_новом_окне "Да" }} target="_blank" {{end}}>{{.Дополнительная_кнопка.Текст}}</a>
+    {{end}}
+    <div class="image-container">
+        <img src="{{.Изображение}}" />
+    </div>
+</div>
+<style>
+    .oblozhka_s_izobrazheniem_vnizu {
+        width: 100%;
+        text-align: center;
+        padding-top: 150px;
+    }
+    .oblozhka_s_izobrazheniem_vnizu h1 {
+        font-size: 52px;
+        line-height: 1.23;
+    }
+    .oblozhka_s_izobrazheniem_vnizu p {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .oblozhka_s_izobrazheniem_vnizu .image-container {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+</style> -->
+
+<div id="rec847796916" class="r t-rec t-rec_pt_120 t-rec_pt-res-480_90 t-rec_pb_45 t-rec_pb-res-480_15" style="padding-top:120px;padding-bottom:45px;background-color:#fff; " data-animationappear="off" data-record-type="1001" data-bg-color="#fff">
+    <!-- t1001 -->
+    <div class="t1001">
+        <div class="t-container t-align_center">
+            <div class="t-col t-col_10 t-prefix_1">
+                <div class="t1001__title t-title t-title_md t-margin_auto" field="title">{{.Заголовок}}</div>
+                <div class="t1001__descr t-descr t-descr_lg t-margin_auto" field="descr">{{.Описание}}</div>
+                    <div class="t1001__btn-wrapper ">
+                        {{if ne .Основная_кнопка nil}}
+                            <div class="t-btnwrapper" style="">
+                                <a href="{{.Основная_кнопка.Url}}" {{if eq .Основная_кнопка.В_новом_окне "Да" }} target="_blank" {{end}} class="t1001__btn t-btn t-btn_md " style="color:rgb(0, 0, 0);background-color:#F5D866;border-radius:30px; -moz-border-radius:30px; -webkit-border-radius:30px;" data-buttonfieldset="button">
+                                    <span>{{.Основная_кнопка.Текст}}</span>
+                                </a>
+                            </div>
+                        {{end}}
+                        {{if ne .Дополнительная_кнопка nil}}
+                            <div class="t-btnwrapper" style="margin-left: 10px; margin-right: 10px;">
+                                <a href="{{.Дополнительная_кнопка.Url}}" {{if eq .Дополнительная_кнопка.В_новом_окне "Да" }} target="_blank" {{end}} rel="noopener noreferrer" class="t1001__btn t-btn t-btn_md " style="color:#ffffff;background-color:#000000;border-radius:30px; -moz-border-radius:30px; -webkit-border-radius:30px;" data-buttonfieldset="button2">
+                                    <span>{{.Дополнительная_кнопка.Текст}}</span>
+                                </a>
+                            </div>
+                        {{end}}
+                    </div>
+            </div>
+        </div>
+        <div class="t1001__img-wrapper t1001__container_indent">
+            <div class="t1001__img t-bgimg" data-original="{{.Изображение}}" style="background-image:url('{{.Изображение}}');" itemscope itemtype="http://schema.org/ImageObject">
+                <meta itemprop="image" content="{{.Изображение}}">
+            </div>
+        </div>
+    </div>
+    <style>
+        #rec847796916 .t1001__img {
+            border-radius: 20px;
+        }
+    </style>
+</div>

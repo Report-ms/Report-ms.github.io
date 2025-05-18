@@ -1,0 +1,56 @@
+<div id="rec847796919" class="r t-rec t-rec_pt_135 t-rec_pt-res-480_90 t-rec_pb_135 t-rec_pb-res-480_90" style="padding-top:135px;padding-bottom:135px;background-color:#fff; " data-animationappear="off" data-record-type="603" data-bg-color="#fff">
+    <!-- t603-->
+    <div class="t603">
+        <div class="t603__container t603__container_indent">
+            <div class="t-section__container t-container t-container_flex">
+                <div class="t-col t-col_12 ">
+                    <div class="t-section__title t-title t-title_xs t-align_center t-margin_auto" field="btitle">Красота и гармония Алтая
+</div>
+                    <div class="t-section__descr t-descr t-descr_xl t-align_center t-margin_auto" field="bdescr">Погрузитесь в атмосферу спокойствия и умиротворения с нашими фотографиями и видео.
+</div>
+                </div>
+            </div>
+            <style>
+                .t-section__descr {
+                    max-width: 560px;
+                }
+
+                #rec847796919 .t-section__title {
+                    margin-bottom: 40px;
+                }
+
+                #rec847796919 .t-section__descr {
+                    margin-bottom: 90px;
+                }
+
+                @media screen and (max-width: 960px) {
+                    #rec847796919 .t-section__title {
+                        margin-bottom:20px;
+                    }
+
+                    #rec847796919 .t-section__descr {
+                        margin-bottom: 45px;
+                    }
+                }
+            </style>
+            <style>
+                #rec847796919 .t-section__descr {
+                    max-width: 560px;
+                }
+            </style>
+            {{range $index, $img :=  getArray .Список_изображений}}
+                <div class="t603__tile t603__tile_25" itemscope itemtype="http://schema.org/ImageObject">
+                    <div class="t603__blockimg t603__blockimg_4-3 t-bgimg" data-original="{{$img}}" bgimgfield="gi_img__0" data-zoom-target="{{$index}}" data-zoomable="yes" data-img-zoom-url="{{$img}}" style="background: url('{{$img}}') center center no-repeat; background-size:cover;">
+                        <meta itemprop="image" content="{{$img}}">
+                    </div>
+                </div>
+            {{end}}
+        </div>
+    </div>
+    <style></style>
+    <style>
+        #rec847796919 .t603__blockimg {
+            border-radius: 15px;
+        }
+    </style>
+</div>

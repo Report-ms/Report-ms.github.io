@@ -1,0 +1,281 @@
+<div class="booking-form">
+    <div class="calendar">
+        <div class="header">
+            <div class="pred-btn"></div>
+            <span class="current-month-and-year"></span>
+            <div class="next-btn"></div>
+        </div>
+        <div class="weekdays">
+            <div>Пн</div>
+            <div>Вт</div>
+            <div>Ср</div>
+            <div>Чт</div>
+            <div>Пт</div>
+            <div>Сб</div>
+            <div>Вс</div>
+        </div>
+        <div class="days">
+
+        </div>
+    </div>
+    <div class="slots hide">
+        <div class="close">Скрыть</div>
+        Слоты для записи на <span class="date"></span>:
+        <div class="slots-list"></div>
+    </div>
+    <div class="contacts hide">
+        <div class="close">Выбрать другой слот</div>
+        Вы записываетесь на <span class="date"></span>:
+        <div class="inputs">
+            {{range $index, $field := getFieldsForDictionary .Справочник_для_броней}}
+                {{if and (ne $field $.Поле_начала_брони) (ne $field $.Поле_окончания_брони) }}
+                    <div class="t-input-group t-input-group_em " style="margin-bottom: 30px;margin-top: 20px;">
+                        <div class="t-input-block ">
+                            <input 
+                            class="t-input js-tilda-rule" 
+                            type="text" 
+                            name="{{getTranslitString $field}}" 
+                            placeholder="{{$field}}"
+                            style="border: 1px solid #c7c7c7;"
+                            >
+                        </div>
+                    </div>
+                {{end}}
+            {{end}}
+        </div>
+        <div class="t-form__submit">
+            <button 
+            type="submit" 
+            class="send t-submit"
+            style="background-color:#F5D866;width: 100%;"
+            >Забронировать</button>
+        </div>
+    </div>
+
+    <div class="result hide">
+        <div class="close">Выбрать другой слот</div>
+        <div class="result-text">Спасибо за бронирование! Менеджер свяжется с Вами в ближайшее время.</div>
+    </div>
+</div>
+
+<script>
+    const fetchDays = (monthAndYear = '') => {
+        fetch('/api/getBookingDaysForMonthAndYear?monthAndYear=' + monthAndYear + "&blockOrderNumber={{.BlockOrderNumber}}&url={{.Url}}")
+        .then(resp => resp.json())
+        .then(resp => {
+            $('.booking-form .calendar .header .current-month-and-year').html(resp.header)
+            $('.booking-form .calendar .header .pred-btn').attr('data-date', resp.prev)
+            $('.booking-form .calendar .header .next-btn').attr('data-date', resp.next)
+            days = ''
+            for(let day of resp.days) {
+                days += `<div data-date="${day.fullDay}" class="day ${day.isCurrentMonth ? 'current-month' : ''} ${day.slots != null && day.slots.length > 0 ? 'can-book' : ''}">${day.day}</div>`
+            }
+            $('.booking-form .calendar .days').html(days)
+            $('.booking-form .calendar .days .day').click(e=>{
+                if($(e.target).hasClass('can-book')) {
+                    let date = $(e.target).attr('data-date')
+                    $('.booking-form .slots .date').html(date)
+                    fetch('/api/getBookingSlotsForDay?day=' + date + "&blockOrderNumber={{.BlockOrderNumber}}&url={{.Url}}")
+                    .then(resp => resp.json())
+                    .then(resp => {
+                        const getTime = (input) => {
+                            let from = input
+                            from = from.split(' ')[1]
+                            from = from.split(':')[0] + ':' + from.split(':')[1]
+                            return from
+                        }
+                        let slots = ''
+                        for(let slot of resp) {
+                            let from = getTime(slot.from)
+                            let to = getTime(slot.to)
+                            slots += `<div data-slot="${date}-${slot.from}-${slot.to}" data-slot-from="${slot.from}" data-slot-to="${slot.to}" class="slot">${from} - ${to}</div>`
+                        }
+                        $('.booking-form .slots .slots-list').html(slots)
+                        $('.booking-form .slots .slots-list .slot').click(e=>{
+                            let slot = $(e.target).attr('data-slot')
+                            let slotFrom = $(e.target).attr('data-slot-from')
+                            let slotTo = $(e.target).attr('data-slot-to')
+                            $('.booking-form .contacts').removeClass('hide')
+                            let dateForView = slot.split('-')[0] + ' с ' + getTime(slot.split('-')[1]) + ' до ' + getTime(slot.split('-')[2])
+                            $('.booking-form .contacts .date').html(dateForView)
+                            $('.booking-form .contacts').attr('data-slot', slot)
+                            $('.booking-form .contacts').attr('data-slot-from', slotFrom)
+                            $('.booking-form .contacts').attr('data-slot-to', slotTo)
+                            $('.booking-form .slots').addClass('hide')
+                            $('.booking-form .calendar').addClass('hide')
+                        })
+                        $('.booking-form .slots').removeClass('hide')
+                    })
+                }
+            })
+        })
+    }
+    $(function () {
+        fetchDays()
+        $('.booking-form .calendar .header .pred-btn').click((event)=>{            
+            fetchDays($(event.target).attr('data-date'))
+        })
+        $('.booking-form .calendar .header .next-btn').click((event)=>{            
+            fetchDays($(event.target).attr('data-date'))
+        })
+
+        $('.booking-form .slots .close').click((e)=>{
+            $('.booking-form .slots').addClass('hide')
+        })
+        $('.booking-form .contacts .close').click((e)=>{
+            $('.booking-form .contacts').addClass('hide')
+            $('.booking-form .slots').removeClass('hide')
+            $('.booking-form .calendar').removeClass('hide')
+        })
+        $('.booking-form .contacts .send').click((e)=>{
+            let body = {}
+            let isError = false
+            $('.booking-form .contacts .inputs input').each((i, input)=>{
+                if($(input).val() == '') {
+                    isError = true
+                    return false
+                }
+                body[$(input).attr('name')] = $(input).val()
+            })
+            body['{{getTranslitString .Поле_начала_брони}}'] = $('.booking-form .contacts').attr('data-slot-from')
+            body['{{getTranslitString .Поле_окончания_брони}}'] = $('.booking-form .contacts').attr('data-slot-to')
+            if(isError){
+                alert('Заполните все поля')
+                return false
+            }
+            let date = $('.booking-form .contacts').attr('data-slot')
+            fetch('/api/bookSlot?date=' + date + "&blockOrderNumber={{.BlockOrderNumber}}&url={{.Url}}", {
+                method: 'POST',
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+            .then(resp => resp.json())
+            .then(resp => {
+                if(resp.success) {
+                    $('.booking-form .contacts').addClass('hide')
+                    $('.booking-form .result').removeClass('hide')
+                    $('.booking-form .contacts .inputs input').each((i, input)=>{$(input).val('')})
+                }else{
+                    alert('При бронировании произошла ошибка!')
+                }
+            })
+        })
+
+        $('.booking-form .result .close').click((e)=>{
+            $('.booking-form .result').addClass('hide')
+            $('.booking-form .contacts').addClass('hide')
+            $('.booking-form .slots').addClass('hide')
+            $('.booking-form .calendar').removeClass('hide')
+            fetchDays()
+        })
+    })
+</script>
+
+<style>
+    .booking-form {
+        /* height: 100px; */
+        padding: 15px;
+        font-family: 'TildaSans', Arial, sans-serif;
+        font-size: 16px;
+        width: 406px;
+        margin: 0px auto 92px auto;
+    }
+
+    .booking-form .calendar {
+    }
+
+    .booking-form .slots {    
+        margin-top: 25px; 
+    }
+
+    .booking-form .slots .close, .booking-form .contacts .close , .booking-form .result .close {
+        cursor: pointer;
+        text-decoration: underline;
+        text-align: right;
+        margin-bottom: 20px;
+    }
+    .booking-form .hide {     
+        display: none;
+    }
+
+
+    .booking-form .calendar .weekdays {     
+    }
+
+    .booking-form .slots .slots-list .slot {
+        cursor: pointer;
+        padding: 5px 10px;
+        border: 1px solid #CCCCCC;
+        border-radius: 3px;
+        margin: 3px; 
+        width: fit-content;
+    }
+
+    .booking-form .slots .slots-list .slot:hover {
+        background-color: #F1F2F2;
+    }
+
+    .booking-form .calendar .header {
+        text-align: center;
+        margin: 40px 0;
+        font-size: 24px;
+    }
+
+    .booking-form .calendar .next-btn, .booking-form .calendar .pred-btn {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        background-position-y: 4px;
+        cursor: pointer;
+        opacity: .6;
+    }
+    .booking-form .calendar .next-btn:hover, .booking-form .calendar .pred-btn:hover {
+        opacity: 1;
+    }
+
+    .booking-form .calendar .next-btn {
+        background-image: url('/site/imgs/arrow_right.svg'); 
+    }
+
+    .booking-form .calendar .pred-btn {
+        background-image: url('/site/imgs/arrow_left.svg'); 
+    }
+
+    .booking-form .calendar .weekdays div {
+        display: inline-block;
+        text-align: center;
+        width: 40px;
+        padding: 4px;
+        margin: 3px;
+        font-weight: bold;
+    }
+
+    .booking-form .days {
+        width: 450px;
+    }
+    .booking-form .days .day {
+        display: inline-block;
+        text-align: center;
+        width: 20px;
+        color: gray;
+        padding: 15px;
+        margin: 3px;
+
+        border: 1px solid #CCCCCC;
+
+        border-radius: 3px;
+    }
+
+    .booking-form .days .day.current-month {
+        color: black;
+        border: 1px solid #CCCCCC;
+    }
+    .booking-form .days .day.can-book {
+        background-color: #77BD8B;
+        color: white;
+        cursor: pointer;
+    }
+</style>
