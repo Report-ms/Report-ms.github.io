@@ -1,0 +1,85 @@
+@font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 250 1000;
+    src: url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations');     
+  }
+  @font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 300;
+    src: url('/site/fonts/TildaSans-Light.eot');
+    src: url('/site/fonts/TildaSans-Light-iefix.eot') format('embedded-opentype'),
+         url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations'),
+         url('/site/fonts/TildaSans-Light.woff2') format('woff2'),
+         url('/site/fonts/TildaSans-Light.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/site/fonts/TildaSans-Regular.eot');
+    src: url('/site/fonts/TildaSans-Regular-iefix.eot') format('embedded-opentype'),
+         url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations'),  
+         url('/site/fonts/TildaSans-Regular.woff2') format('woff2'),
+         url('/site/fonts/TildaSans-Regular.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('/site/fonts/TildaSans-Medium.eot');
+    src: url('/site/fonts/TildaSans-Medium-iefix.eot') format('embedded-opentype'),
+         url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations'),  
+         url('/site/fonts/TildaSans-Medium.woff2') format('woff2'),
+         url('/site/fonts/TildaSans-Medium.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('/site/fonts/TildaSans-Semibold.eot');
+    src: url('/site/fonts/TildaSans-Semibold-iefix.eot') format('embedded-opentype'),
+         url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations'),  
+         url('/site/fonts/TildaSans-Semibold.woff2') format('woff2'),
+         url('/site/fonts/TildaSans-Semibold.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('/site/fonts/TildaSans-Bold.eot');
+    src: url('/site/fonts/TildaSans-Bold-iefix.eot?') format('embedded-opentype'),
+         url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations'),  
+         url('/site/fonts/TildaSans-Bold.woff2') format('woff2'),
+         url('/site/fonts/TildaSans-Bold.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 800;
+    src: url('/site/fonts/TildaSans-Extrabold.eot');
+    src: url('/site/fonts/TildaSans-Extrabold-iefix.eot?') format('embedded-opentype'),
+         url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations'),  
+         url('/site/fonts/TildaSans-Extrabold.woff2') format('woff2'),
+         url('/site/fonts/TildaSans-Extrabold.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'TildaSans';
+    font-style: normal;
+    font-weight: 900;
+    src: url('/site/fonts/TildaSans-Black.eot');
+    src: url('/site/fonts/TildaSans-Black-iefix.eot?') format('embedded-opentype'),
+         url('/site/fonts/TildaSans-VF.woff2') format('woff2-variations'),
+         url('/site/fonts/TildaSans-VF.woff') format('woff-variations'),  
+         url('/site/fonts/TildaSans-Black.woff2') format('woff2'),
+         url('/site/fonts/TildaSans-Black.woff') format('woff');
+  }
+  
