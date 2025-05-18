@@ -1,0 +1,17 @@
+{
+    "runWinFile": "Downloads/win/report.exe",
+    "taskRunnerFile": "Downloads/task_runner.py",
+    "htmlBloksfiles": [
+        "Downloads/html/layout.html",
+        "Downloads/html/blocks/blok_prizyva_k_deystviyu_zagolovok,_opisanie_i_knopki.html",
+        "Downloads/html/blocks/dve_kolonki_s_chetyr_mya_kartinkami_i_tekstom.html",
+        "Downloads/html/blocks/forma_bronirovaniya_slotov.html"
+    ],
+    "wwwfiles": [
+        "Downloads/www/index.html",
+        "Downloads/www/manifest.json",
+        "Downloads/www/semantic.min.css",
+        "Downloads/www/favicon.ico",
+        "Downloads/www/asset-manifest.json"
+    ]
+}
