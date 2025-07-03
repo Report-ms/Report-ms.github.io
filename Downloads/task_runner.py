@@ -25,6 +25,34 @@ if is_debug:
 sys.stdout.reconfigure(encoding='utf-8')
 
 
+
+def get_translit_string(str):
+    if str == "Пользователи":
+        return "Users"
+    if str == "Пользователь":
+        return "User"
+    if str == "Имя":
+        return "Name"
+    if str == "Имя":
+        return "Name"
+    if str == "Пароль":
+        return "Password"
+    if str == "Роль":
+        return "Role"
+
+    lat_up = ["A", "B", "V", "G", "D", "E", "Yo", "Zh", "Z", "I", "Y", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "F", "Kh", "Ts", "Ch", "Sh", "Shch", "\"", "Y", "'", "E", "Yu", "Ya"]
+    lat_low = ["a", "b", "v", "g", "d", "e", "yo", "zh", "z", "i", "y", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f", "kh", "ts", "ch", "sh", "shch", "\"", "y", "'", "e", "yu", "ya"]
+    rus_up = ["А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я"]
+    rus_low = ["а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"]
+    for i in range(33):
+        str = str.replace(rus_up[i], lat_up[i])
+        str = str.replace(rus_low[i], lat_low[i])
+    str = str.replace(" ", "_")
+    str = str.replace("'", "_")
+    str = str.replace('"', "_")
+    return str
+
+
 def resolve_field(configuration_dictionary, name):
     fields_candidates = list(filter(lambda x: x['ruName'] == name, configuration_dictionary['columns']))
     if len(fields_candidates) == 0:
@@ -224,6 +252,64 @@ class ContextParameters():
             value = datetime.strptime(value, "%d.%m.%Y %H:%M:%S")
         return value        
 
+class DictionaryObjectForMigrator:
+    def __init__(self, migrator, dictionary, json_object):
+        self.migrator = migrator
+        self.dictionary = dictionary
+        self.json_object = json_object
+        self.id = json_object["Id"]
+    def get(self, field_name):
+        return self.json_object[get_translit_string(field_name)]
+        
+    def set(self, field_name, value):
+        self.json_object[get_translit_string(field_name)] = value
+        file_path = os.path.join(self.migrator.data_folder, get_translit_string(self.dictionary.name) + ".json")
+        objects = json.load(open(file_path, encoding='utf-8'))
+        objects = list(map(lambda x: self.json_object if x['Id'] == self.id else x, objects))
+        json.dump(objects, open(file_path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+
+class DictionaryForMigrator:
+    def __init__(self, migrator, name):
+        self.migrator = migrator
+        self.name = name
+    def find(self, filters):
+        file_path = os.path.join(self.migrator.data_folder, get_translit_string(self.name) + ".json")
+        objects = json.load(open(file_path, encoding='utf-8'))
+        result = []
+        for json_object in objects:
+            is_valid = False
+            dictionary_object = DictionaryObjectForMigrator(self.migrator, self, json_object)
+            filters_keys_count = len(list(filters.keys()))
+            if filters_keys_count == 0:
+                is_valid = True
+            else:
+                passed_filters_count = 0
+                for key in filters:
+                    val = filters[key]
+                    validation_function = lambda x: x == val
+                    if type(filters[key]) is DictionaryForMigrator:
+                        validation_function = lambda x: x == filters[key].id
+                    else:
+                        if type(val) is dict and (val['from'] is not None or val['to'] is not None):
+                            validation_function = lambda x: val['from'] >= x and val['to'] <= x
+                    if validation_function(dictionary_object.get(key)):
+                        passed_filters_count += 1
+                if passed_filters_count == filters_keys_count:
+                    is_valid = True
+            if is_valid:
+                result.append(dictionary_object)
+        return result
+    def all(self):
+        self.find({})
+
+class Migrator:
+    def __init__(self, data_folder):
+        self.data_folder = data_folder
+    def dictionary(self, name):
+        return DictionaryForMigrator(self, name)
+    def role(self, name):
+        return get_translit_string(name)
+    
 class App:
     def __init__(self, url):
         self.base_url = f'{url}/api'
@@ -234,6 +320,9 @@ class App:
     def set_token(self, token):
         self.headers = {"Authorization": f"Bearer {token}"}
         self.update_configuration()
+    
+    def set_data_folder(self, folder):
+        self.data_folder = folder
 
 
     def set_password(self, user, password):
@@ -249,7 +338,7 @@ class App:
             app.common = module
 
     def temp(self):
-        return os.getcwd() + "/.data/temp/"
+        return self.data_folder + "/temp/"
     def send_email(self, to, title, body, files=[]):
         def try_get_id(x):
             if type(x) is str:
@@ -357,18 +446,21 @@ def load_and_run_script(tasks_directory, context_file_name, script_path, app):
     #result = json.dumps(result, ensure_ascii = False)
     new_file_name = context_file_name.replace('.json', '_result.json')
     with open(os.path.join(tasks_directory, new_file_name), 'w', encoding='utf-8') as f:
-        f.write(json.dumps({
+        json.dump({
             'isError': is_error,
             'message': result,
             'files': app.output_files,
-            'openNewPages': [],
-        }, ensure_ascii = False))
+            'openNewPages': []
+        }, f, ensure_ascii=False, indent=4)
 
 
-def monitor_directory(appFolder, tasks_directory, app):
+def monitor_directory(appFolder, dataFolder, tasks_directory, app):
     
     known_contexts = set()
     start_time = time.time()
+    pid = os.getpid()
+    with open(os.path.join(appFolder, dataFolder, 'python_worker_pid'), "w") as f:
+        f.write(str(pid))
     counter = 0
     while True:
         current_contexts = {f: os.path.getmtime(os.path.join(tasks_directory, f))
@@ -381,9 +473,13 @@ def monitor_directory(appFolder, tasks_directory, app):
             if context.endswith('_result.json'):
                 continue
             context_object = json.load(open(os.path.join(tasks_directory, context), encoding='utf-8'))
-            app.set_context(context_object['dictionary'], context_object['contextObjectId'], context_object['contextUserId'], json.dumps(context_object['params'], ensure_ascii = False), context_object['action'])
-            app_copied = copy.copy(app)  
-            threading.Thread(target=load_and_run_script, args=(tasks_directory, context, os.path.join(appFolder, context_object['scriptPath']), app_copied)).start()
+            if 'isMigration' in context_object and context_object["isMigration"] == True:
+                threading.Thread(target=load_and_run_script, args=(tasks_directory, context, os.path.join(appFolder, context_object['scriptPath']), Migrator(dataFolder))).start()
+                pass
+            else:
+                app.set_context(context_object['dictionary'], context_object['contextObjectId'], context_object['contextUserId'], json.dumps(context_object['params'], ensure_ascii = False), context_object['action'])
+                app_copied = copy.copy(app)  
+                threading.Thread(target=load_and_run_script, args=(tasks_directory, context, os.path.join(appFolder, context_object['scriptPath']), app_copied)).start()
             known_contexts.add(context) 
 
         time.sleep(0.1)
@@ -398,11 +494,13 @@ def monitor_directory(appFolder, tasks_directory, app):
 
 appUrl = args[0]
 appFolder = args[1]
-token = args[2]
+dataFolder = args[2]
+token = args[3]
 app = App(appUrl)
+app.set_data_folder(dataFolder)
 app.set_token(token)
-app.instanseId = args[3]
+app.instanseId = args[4]
 
 time.sleep(3)
 
-monitor_directory(appFolder, appFolder + '/.data/tasks', app)  
+monitor_directory(appFolder, dataFolder, appFolder + '/' + dataFolder + '/tasks', app)  
