@@ -12,16 +12,15 @@ import copy
 
 
 args = sys.argv[1:]
-is_debug = True if len(args) > 4 and args[4] == 'debug' else False
+is_debug = True if len(args) > 4 and args[5] == 'debug' else False
 if is_debug:
     print('start debug server...')
-    port_for_debug = int(args[5])
+    port_for_debug = int(args[6])
     debugpy.listen(("localhost", port_for_debug))  
     print('Debug server started')
     print('Wait for connect client...')
     debugpy.wait_for_client()  
     print('start debugger')
-
 sys.stdout.reconfigure(encoding='utf-8')
 
 
