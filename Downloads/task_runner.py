@@ -12,7 +12,7 @@ import copy
 
 
 args = sys.argv[1:]
-is_debug = True if len(args) > 4 and args[5] == 'debug' else False
+is_debug = True if len(args) > 5 and args[5] == 'debug' else False
 if is_debug:
     print('start debug server...')
     port_for_debug = int(args[6])
@@ -258,7 +258,10 @@ class DictionaryObjectForMigrator:
         self.json_object = json_object
         self.id = json_object["Id"]
     def get(self, field_name):
-        return self.json_object[get_translit_string(field_name)]
+        key = get_translit_string(field_name)
+        if key in self.json_object.keys():
+            return self.json_object[key]
+        return None
         
     def set(self, field_name, value):
         self.json_object[get_translit_string(field_name)] = value
@@ -299,7 +302,7 @@ class DictionaryForMigrator:
                 result.append(dictionary_object)
         return result
     def all(self):
-        self.find({})
+        return self.find({})
 
 class Migrator:
     def __init__(self, data_folder):
@@ -308,6 +311,17 @@ class Migrator:
         return DictionaryForMigrator(self, name)
     def role(self, name):
         return get_translit_string(name)
+    def rename_dictionary(self, old_dictionary_name, new_dictionary_name):
+        os.rename(os.path.join(self.data_folder, get_translit_string(old_dictionary_name) + ".json"), os.path.join(self.data_folder, get_translit_string(new_dictionary_name) + ".json"))
+    def rename_field(self, dictionary_name, field_old_name, field_new_name):
+        file_path = os.path.join(self.data_folder, get_translit_string(dictionary_name) + ".json")
+        all_objects = json.load(open(file_path, encoding='utf-8'))
+        for object in all_objects:
+            if get_translit_string(field_old_name) in object.keys():
+                object[get_translit_string(field_new_name)] = object[get_translit_string(field_old_name)]
+                del object[get_translit_string(field_old_name)]
+        json.dump(all_objects, open(file_path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+        
     
 class App:
     def __init__(self, url):
