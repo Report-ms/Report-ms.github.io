@@ -104,7 +104,7 @@ class DictionaryObject:
         filed_name = self.dictionary.configuration_dictionary['fieldForDefaultNameOfLinkTo']
         return f'{self.dictionary.name}: {self.data[filed_name]} ({self.id})'
 
-    def set(self, name, value = None):
+    def set(self, name, value = None, without_events = False):
         data = self.dictionary.app.requests_session.get(f'{self.dictionary.app.base_url}/{self.dictionary.strictNameMany}/getById/{self.id}', headers=self.dictionary.app.headers).json()
         if type(name) is str:
             for key in data:
@@ -113,7 +113,7 @@ class DictionaryObject:
         else:
             for key in name:
                 data[resolve_field_name(self.dictionary.configuration_dictionary, key)] = to_string(to_string(name[key]))
-        response = self.dictionary.app.requests_session.post(f'{self.dictionary.app.base_url}/{self.dictionary.strictNameMany}/createOrUpdate/ru', json=data, headers=self.dictionary.app.headers)
+        response = self.dictionary.app.requests_session.post(f'{self.dictionary.app.base_url}/{self.dictionary.strictNameMany}/createOrUpdate/ru' + ('?withoutEvents=true' if without_events else ''), json=data, headers=self.dictionary.app.headers)
         self.is_fetched = False
 
     def get(self, name):
@@ -198,11 +198,11 @@ class Dictionary:
     def all(self):
         return self.find({})
 
-    def create(self, dict_obj):
+    def create(self, dict_obj, without_events = False):
         data = {}
         for key in dict_obj:
             data[resolve_field_name(self.configuration_dictionary, key)] = to_string(dict_obj[key])
-        response = self.app.requests_session.post(f'{self.app.base_url}/{self.strictNameMany}/createOrUpdate/ru', headers=self.app.headers, json=data).json()
+        response = self.app.requests_session.post(f'{self.app.base_url}/{self.strictNameMany}/createOrUpdate/ru' + ('?withoutEvents=true' if without_events else ''), headers=self.app.headers, json=data).json()
         errorMessage = response['errorMessage']
         if errorMessage != None and errorMessage != '':
             raise Exception(f'Error on create "{self.strictNameMany}": {errorMessage}')
