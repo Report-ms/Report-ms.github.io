@@ -197,6 +197,12 @@ class Dictionary:
 
     def all(self):
         return self.find({})
+    
+    def first(self, dict_search):
+        candidates = self.find(dict_search)
+        if len(candidates) > 0:
+            return candidates[0]
+        return None
 
     def create(self, dict_obj, without_events = False):
         data = {}
