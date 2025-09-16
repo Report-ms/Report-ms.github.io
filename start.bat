@@ -1,1 +1,0 @@
-npx serve -p 8000
