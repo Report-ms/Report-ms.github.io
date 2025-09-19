@@ -46,9 +46,16 @@ def get_translit_string(str):
     for i in range(33):
         str = str.replace(rus_up[i], lat_up[i])
         str = str.replace(rus_low[i], lat_low[i])
-    str = str.replace(" ", "_")
-    str = str.replace("'", "_")
-    str = str.replace('"', "_")
+    
+    engSymbols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+		"_"]
+
+    for symbol in str:
+        if symbol not in engSymbols:
+            str = str.replace(symbol, "_")
+
     return str
 
 
@@ -104,7 +111,7 @@ class DictionaryObject:
         filed_name = self.dictionary.configuration_dictionary['fieldForDefaultNameOfLinkTo']
         return f'{self.dictionary.name}: {self.data[filed_name]} ({self.id})'
 
-    def set(self, name, value = None, without_events = False):
+    def set_inner(self, name, value = None, without_events = False):
         data = self.dictionary.app.requests_session.get(f'{self.dictionary.app.base_url}/{self.dictionary.strictNameMany}/getById/{self.id}', headers=self.dictionary.app.headers).json()
         if type(name) is str:
             for key in data:
@@ -115,8 +122,16 @@ class DictionaryObject:
                 data[resolve_field_name(self.dictionary.configuration_dictionary, key)] = to_string(to_string(name[key]))
         response = self.dictionary.app.requests_session.post(f'{self.dictionary.app.base_url}/{self.dictionary.strictNameMany}/createOrUpdate/ru' + ('?withoutEvents=true' if without_events else ''), json=data, headers=self.dictionary.app.headers)
         self.is_fetched = False
+    def set(self, name, value = None):
+        return self.set_inner(name, value, False)
 
+    def set_without_events(self, name, value = None):
+        return self.set_inner(name, value, True)
+    
     def get(self, name):
+        def get_dictionary_runame_by_strict_name(strict_name):
+            return list(filter(lambda x: x['strictNameMany'] == strict_name, self.dictionary.app.configuration['dictionaries']))[0]['ruNameMany']
+
         field = '' if name == 'Дата создания' else resolve_field(self.dictionary.configuration_dictionary, name)
         if self.is_fetched is False:
             self.data = self.dictionary.app.requests_session.get(f'{self.dictionary.app.base_url}/{self.dictionary.strictNameMany}/getById/{self.id}', headers=self.dictionary.app.headers).json()
@@ -125,12 +140,12 @@ class DictionaryObject:
             return datetime.strptime(self.data['CreateAt'], "%Y-%m-%dT%H:%M:%SZ")
         field_value = self.data[field['name']] if field['name'] in self.data else None
         if field['type'] == 'linkToDictionary' and type(field_value) is not DictionaryObject and field_value is not None:
-            link_to_dictionary_strict_name = field['linkTo']
-            link_to_dictionary_ru_name = list(filter(lambda x: x['strictNameMany'] == link_to_dictionary_strict_name, self.dictionary.app.configuration['dictionaries']))[0]['ruNameMany']
-            self.data[field['name']] = DictionaryObject(Dictionary(self.dictionary.app, link_to_dictionary_ru_name), field_value)
+            self.data[field['name']] = DictionaryObject(Dictionary(self.dictionary.app, get_dictionary_runame_by_strict_name(field['linkTo'])), field_value)
             field_value = self.data[field['name']]
         if (field['type'] == 'dateTime' or field['type'] == 'date') and field_value is not None and field_value != '':
             field_value = datetime.strptime(field_value, "%d.%m.%Y %H:%M:%S")
+        if field['type'] == 'innerTable':
+            field_value = list(map(lambda x: DictionaryObject(Dictionary(self.dictionary.app, get_dictionary_runame_by_strict_name(field['linkTo'])), x['Id']), field_value))
         return field_value
 
     def action(self, action_name, parameters = None):
@@ -191,7 +206,6 @@ class Dictionary:
             search += ('' if index == 0 else '&') + f'{resolve_field_name(self.configuration_dictionary, key)}={val}'
             index += 1
         url = f'{self.app.base_url}/{self.strictNameMany}/getList/0/100?{search}'
-        print(url)
         result = self.app.requests_session.get(url, headers=self.app.headers).json()['rows']
         return list(map(lambda x: DictionaryObject(self, x['Id']), result))
 
@@ -204,7 +218,7 @@ class Dictionary:
             return candidates[0]
         return None
 
-    def create(self, dict_obj, without_events = False):
+    def create_inner(self, dict_obj, without_events):
         data = {}
         for key in dict_obj:
             data[resolve_field_name(self.configuration_dictionary, key)] = to_string(dict_obj[key])
@@ -213,6 +227,11 @@ class Dictionary:
         if errorMessage != None and errorMessage != '':
             raise Exception(f'Error on create "{self.strictNameMany}": {errorMessage}')
         return DictionaryObject(self, response['id'])
+
+    def create(self, dict_obj):
+        return self.create_inner(dict_obj, False)
+    def create_without_events(self, dict_obj):
+        return self.create_inner(dict_obj, True)
 
 class ControllerContextParameters():
     def __init__(self, app, init_string):
@@ -461,6 +480,7 @@ def load_and_run_script(tasks_directory, context_file_name, script_path, app):
         is_error = True
     except Exception as e:
         result = f"Error in module \"{script_path}\": {traceback.format_exc()}"
+        print(result)
         is_error = True
     #result = json.dumps(result, ensure_ascii = False)
     new_file_name = context_file_name.replace('.json', '_result.json')
