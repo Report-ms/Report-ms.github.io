@@ -10,7 +10,6 @@ import debugpy
 import threading
 import copy  
 
-
 args = sys.argv[1:]
 is_debug = True if len(args) > 5 and args[5] == 'debug' else False
 if is_debug:
@@ -23,7 +22,21 @@ if is_debug:
     print('start debugger')
 sys.stdout.reconfigure(encoding='utf-8')
 
+datetime_format = "%Y-%m-%dT%H:%M:%SZ"
 
+def datetime_to_string(x):
+    if x is None:
+        return None
+    if type(x) is datetime:
+        return x.strftime(datetime_format)
+    return x
+
+def parse_datetime_from_string(x):
+    if x is None:
+        return None
+    if type(x) is str:
+        return datetime.strptime(x, datetime_format)
+    return x
 
 def get_translit_string(str):
     if str == "Пользователи":
@@ -80,7 +93,7 @@ def to_string(value):
     if type(value) is DictionaryObject:
         return value.id
     if type(value) is datetime:
-        return value.strftime("%d.%m.%Y %H:%M:%S")
+        return datetime_to_string(value)
     if type(value) is list:
         return list(map(to_string, value)) if len(value) > 0 else value
     return value
@@ -137,13 +150,13 @@ class DictionaryObject:
             self.data = self.dictionary.app.requests_session.get(f'{self.dictionary.app.base_url}/{self.dictionary.strictNameMany}/getById/{self.id}', headers=self.dictionary.app.headers).json()
             self.is_fetched = True
         if name == 'Дата создания':
-            return datetime.strptime(self.data['CreateAt'], "%Y-%m-%dT%H:%M:%SZ")
+            return parse_datetime_from_string(self.data['CreateAt'])
         field_value = self.data[field['name']] if field['name'] in self.data else None
         if field['type'] == 'linkToDictionary' and type(field_value) is not DictionaryObject and field_value is not None:
             self.data[field['name']] = DictionaryObject(Dictionary(self.dictionary.app, get_dictionary_runame_by_strict_name(field['linkTo'])), field_value)
             field_value = self.data[field['name']]
         if (field['type'] == 'dateTime' or field['type'] == 'date') and field_value is not None and field_value != '':
-            field_value = datetime.strptime(field_value, "%d.%m.%Y %H:%M:%S")
+            field_value = parse_datetime_from_string(field_value)
         if field['type'] == 'innerTable':
             field_value = list(map(lambda x: DictionaryObject(Dictionary(self.dictionary.app, get_dictionary_runame_by_strict_name(field['linkTo'])), x['Id']), field_value))
         return field_value
@@ -263,17 +276,13 @@ class ContextParameters():
             get_token_url = f'{self.app.base_url}/file/createDownloadToken?fileId={file_id}&name={file_name}'
             token = self.app.requests_session.get(get_token_url, headers=self.app.headers).json()['token']
             return f'{self.app.base_url}/file/downloadBy?token={token}'
-            # df = pd.read_excel()
-            
-            # Вывод первых 5 строк DataFrame  
-            #print(df.head())
 
         if field['type'] == 'linkToDictionary' and type(value) is not DictionaryObject and value is not None:
             link_to_dictionary_strict_name = field['linkTo']
             link_to_dictionary_ru_name = list(filter(lambda x: x['strictNameMany'] == link_to_dictionary_strict_name, self.app.configuration['dictionaries']))[0]['ruNameMany']
             value = DictionaryObject(Dictionary(self.app, link_to_dictionary_ru_name), value)
         if (field['type'] == 'dateTime' or field['type'] == 'date') and value is not None and value != '':
-            value = datetime.strptime(value, "%d.%m.%Y %H:%M:%S")
+            value = parse_datetime_from_string(value)
         return value        
 
 class DictionaryObjectForMigrator:
@@ -391,6 +400,20 @@ class App:
             'body': body,
             'files': list(map(try_get_id, files))
         })
+
+    def send_chat(self, from_user, to_user, text):
+        def try_get_id(x):
+            if type(x) is str:
+                if ':' in x:
+                    return json.loads(x)['id']
+                return x
+            else:
+                return x.id
+        response = self.requests_session.post(f'{self.base_url}/system/sendChat', headers=self.headers, json={
+            'from': try_get_id(from_user), 
+            'to': try_get_id(to_user), 
+            'text': text, 
+        })
         
     def upload_image(self, path):
         response = self.requests_session.post(f'{self.base_url}/file/uploadImage', headers=self.headers, files={'file': open(path, 'rb')})
@@ -449,7 +472,7 @@ class App:
             self.context_user = self.dictionary('Пользователи').get_by_id(context_user_id)
 
         if context_parameters != '' and context_parameters != '{}' and context_action_name != '' and not context_action_name.endswith('Event'):
-            if context_action_name.endswith('Controller'):
+            if context_action_name.endswith('Controller') or context_action_name == 'NewMessageInChat':
                 self.context_parameters = ControllerContextParameters(self, context_parameters)
             else:
                 self.context_parameters = ContextParameters(self, context_parameters, context_action_name)
